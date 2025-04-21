@@ -10,6 +10,6 @@ public class DataBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Hunger -= Time.deltaTime * 5f;
+        Hunger += Time.deltaTime * 5f;
     }
 }

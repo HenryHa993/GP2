@@ -1,4 +1,5 @@
 using CrashKonijn.Agent.Core;
+using CrashKonijn.Agent.Runtime;
 using CrashKonijn.Goap.Runtime;
 using UnityEngine;
 
@@ -37,13 +38,16 @@ namespace GP2.GOAP
         // This method is required
         public override IActionRunState Perform(IMonoAgent agent, Data data, IActionContext context)
         {
-            return ActionRunState.Completed;
+            //Debug.Log("EATING");
+            return ActionRunState.WaitThenComplete(3f);
         }
 
         // This method is called when the action is completed
         // This method is optional and can be removed
         public override void Complete(IMonoAgent agent, Data data)
         {
+            data.DataBehaviour.FoodCount--;
+            data.DataBehaviour.Hunger = 0f;
         }
 
         // This method is called when the action is stopped
@@ -63,6 +67,9 @@ namespace GP2.GOAP
         public class Data : IActionData
         {
             public ITarget Target { get; set; }
+            
+            [GetComponent]
+            public DataBehaviour DataBehaviour { get; set; }
         }
     }
 }

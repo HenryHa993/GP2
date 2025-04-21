@@ -12,7 +12,8 @@ namespace GP2.GOAP
         {
             var builder = new AgentTypeBuilder("TestAgent");
             builder.AddCapability<IdleCapabilityFactory>();
-            //builder.AddCapability<FoodCapability>();
+            builder.AddCapability<FoodCapability>();
+            builder.AddCapability<EatCapabilityFactory>();
             return builder.Build();
         }
     }
