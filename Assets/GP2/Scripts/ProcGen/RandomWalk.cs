@@ -8,6 +8,19 @@ namespace GP2.ProcGen
 {
     public static class RandomWalk
     {
+        /* Perform RandomWalkWithIterations at select locations.*/
+        public static HashSet<Vector2Int> WalkAtLocations(HashSet<Vector2Int> startPositions, int iterations,
+            int steps, bool randomStart)
+        {
+            HashSet<Vector2Int> tilePositions = new HashSet<Vector2Int>();
+            foreach (var position in startPositions)
+            {
+                tilePositions.UnionWith(WalkWithIterations(position, iterations, steps, randomStart));
+            }
+
+            return tilePositions;
+        }
+        
         /* Perform multiple iterations.*/
         public static HashSet<Vector2Int> WalkWithIterations(Vector2Int startPosition, int iterations,
             int steps, bool randomStart)
@@ -40,6 +53,23 @@ namespace GP2.ProcGen
                 Vector2Int newPosition  = prevPosition + Direction2D.GetRandomDirection();
                 path.Add(newPosition);
                 prevPosition = newPosition;
+            }
+
+            return path;
+        }
+
+        public static List<Vector2Int> CorridorWalkWithIterations(HashSet<Vector2Int> roomPositions, Vector2Int startPosition,
+            int iterations, int steps)
+        {
+            List<Vector2Int> path = new List<Vector2Int>();
+            Vector2Int currentPosition = startPosition;
+            roomPositions.Add(currentPosition);
+            for (int i = 0; i < iterations; i++)
+            {
+                List<Vector2Int> generatedPath = CorridorWalk(currentPosition, steps);
+                path.AddRange(generatedPath);
+                currentPosition = path.Last();
+                roomPositions.Add(currentPosition);
             }
 
             return path;

@@ -184,8 +184,11 @@ MonoBehaviour:
   StartPosition: {x: 0, y: 0}
   Iterations: 10
   StepsPerIteration: 100
-  NumberOfCorridors: 100
+  RoomPercent: 0.7
+  RandomStart: 0
+  CorridorIterations: 100
   CorridorLength: 50
+  DeadEnds: 1
   FloorTilemap: {fileID: 2127609176}
   WallTilemap: {fileID: 1334382597}
   DecorationTilemap: {fileID: 0}
