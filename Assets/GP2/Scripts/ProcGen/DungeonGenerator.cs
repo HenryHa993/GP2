@@ -26,19 +26,11 @@ public class DungeonGenerator : MonoBehaviour
     public int CorridorLength;
     public bool DeadEnds;
 
-    [Header("Background")]
-    public int BackgroundScale;
-    
-    [Header("Tilemaps")]
-    public Tilemap FloorTilemap;
-    public Tilemap WallTilemap;
-    public Tilemap BackgroundTilemap;
-    public Tile FloorTile;
-    public Tile WallTile;
-    public RuleTile BackgroundRuleTile;
+    private DungeonTiler DungeonTiler;
 
     private void Start()
     {
+        DungeonTiler = GetComponent<DungeonTiler>();
         Generate();
     }
 
@@ -46,39 +38,41 @@ public class DungeonGenerator : MonoBehaviour
     public void Generate()
     {
         GenerateRoomsWithCorridors();
-        BoundsInt bounds = WallTilemap.cellBounds;
-        GenerateBackground(bounds);
+        // Place this in dungeon tiler
+        BoundsInt bounds = DungeonTiler.WallTilemap.cellBounds;
+        DungeonTiler.GenerateBackground(bounds);
     }
 
     public void GenerateRoomsOnly()
     {
         HashSet<Vector2Int> positions =
             RandomWalk.WalkWithIterations(StartPosition, Iterations, StepsPerIteration, true);
-        TileFloor(positions);
+        DungeonTiler.TileFloor(positions);
         
         HashSet<Vector2Int> wallPositions = GetWallPositions(positions);
-        TileWalls(wallPositions);
+        DungeonTiler.TileWalls(wallPositions);
     }
 
     public void GenerateCorridorsOnly()
     {
         List<Vector2Int> corridorPositions =
             RandomWalk.CorridorWalkWithIterations(StartPosition, CorridorIterations, CorridorLength);
-        TileFloor(corridorPositions);
+        DungeonTiler.TileFloor(corridorPositions);
         
         HashSet<Vector2Int> wallPositions = GetWallPositions(corridorPositions);
-        TileWalls(wallPositions);
+        DungeonTiler.TileWalls(wallPositions);
     }
     
     public void GenerateRoomsWithCorridors()
     {
-        // Generate corridors to get positions for potential room placement
         HashSet<Vector2Int> floorPositions = new HashSet<Vector2Int>();
         HashSet<Vector2Int> roomPositions = new HashSet<Vector2Int>();
+        
+        // Generate corridors to get positions for potential room placement
         List<Vector2Int> corridorPositions =
             RandomWalk.CorridorWalkWithIterations(roomPositions, StartPosition, CorridorIterations, CorridorLength);
         
-        // Filter out a random subset of room positions
+        // Filter out a random subset of room positions from corridor generations
         int num = Mathf.RoundToInt(RoomPercent * roomPositions.Count);
         for (int i = 0; i < roomPositions.Count; i++)
         {
@@ -137,25 +131,10 @@ public class DungeonGenerator : MonoBehaviour
         floorPositions = ScaleTilePositions(floorPositions);
         
         // Tile map
-        TileFloor(floorPositions);
+        DungeonTiler.TileFloor(floorPositions);
         
         HashSet<Vector2Int> wallPositions = GetWallPositions(floorPositions);
-        TileWalls(wallPositions);
-    }
-
-    /* Generate a background based off bounds.*/
-    public void GenerateBackground(BoundsInt bounds)
-    {
-        Vector3Int topBound = new Vector3Int(bounds.max.x, bounds.max.y);
-        Vector3Int bottomBound = new Vector3Int(bounds.min.x, bounds.min.y);
-
-        for (int x = bottomBound.x; x < topBound.x; x++)
-        {
-            for (int y = bottomBound.y; y < topBound.y; y++)
-            {
-                BackgroundTilemap.SetTile(new Vector3Int(x, y), BackgroundRuleTile);
-            }
-        }
+        DungeonTiler.TileWalls(wallPositions);
     }
 
     /* Scale tiles to adjust for walker size.*/
@@ -179,16 +158,6 @@ public class DungeonGenerator : MonoBehaviour
         return scaledPositions;
     }
 
-    private void TileWalls(HashSet<Vector2Int> positions)
-    {
-        WallTilemap.ClearAllTiles();
-        
-        foreach (var position in positions)
-        {
-            WallTilemap.SetTile(new Vector3Int(position.x, position.y), WallTile);
-        }
-    }
-
     private HashSet<Vector2Int> GetWallPositions(IEnumerable<Vector2Int> positions)
     {
         HashSet<Vector2Int> wallPositions = new HashSet<Vector2Int>();
@@ -206,15 +175,5 @@ public class DungeonGenerator : MonoBehaviour
         }
         
         return wallPositions;
-    }
-
-    private void TileFloor(IEnumerable<Vector2Int> positions)
-    {
-        FloorTilemap.ClearAllTiles();
-
-        foreach (var position in positions)
-        {
-            FloorTilemap.SetTile(new Vector3Int(position.x, position.y), FloorTile);
-        }
     }
 }
