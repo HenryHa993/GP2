@@ -6,6 +6,7 @@ using GP2.ProcGen;
 using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
 public class DungeonGenerator : MonoBehaviour
@@ -24,13 +25,17 @@ public class DungeonGenerator : MonoBehaviour
     public int CorridorIterations;
     public int CorridorLength;
     public bool DeadEnds;
+
+    [Header("Background")]
+    public int BackgroundScale;
     
     [Header("Tilemaps")]
     public Tilemap FloorTilemap;
     public Tilemap WallTilemap;
-    public Tilemap DecorationTilemap;
+    public Tilemap BackgroundTilemap;
     public Tile FloorTile;
     public Tile WallTile;
+    public RuleTile BackgroundRuleTile;
 
     private void Start()
     {
@@ -41,6 +46,8 @@ public class DungeonGenerator : MonoBehaviour
     public void Generate()
     {
         GenerateRoomsWithCorridors();
+        BoundsInt bounds = WallTilemap.cellBounds;
+        GenerateBackground(bounds);
     }
 
     public void GenerateRoomsOnly()
@@ -126,11 +133,50 @@ public class DungeonGenerator : MonoBehaviour
         // Union with corridor positions
         floorPositions.UnionWith(corridorPositions);
         
+        // Scale positions
+        floorPositions = ScaleTilePositions(floorPositions);
+        
         // Tile map
         TileFloor(floorPositions);
         
         HashSet<Vector2Int> wallPositions = GetWallPositions(floorPositions);
         TileWalls(wallPositions);
+    }
+
+    /* Generate a background based off bounds.*/
+    public void GenerateBackground(BoundsInt bounds)
+    {
+        Vector3Int topBound = new Vector3Int(bounds.max.x, bounds.max.y);
+        Vector3Int bottomBound = new Vector3Int(bounds.min.x, bounds.min.y);
+
+        for (int x = bottomBound.x; x < topBound.x; x++)
+        {
+            for (int y = bottomBound.y; y < topBound.y; y++)
+            {
+                BackgroundTilemap.SetTile(new Vector3Int(x, y), BackgroundRuleTile);
+            }
+        }
+    }
+
+    /* Scale tiles to adjust for walker size.*/
+    public HashSet<Vector2Int> ScaleTilePositions(IEnumerable<Vector2Int> positions)
+    {
+        HashSet<Vector2Int> scaledPositions = new HashSet<Vector2Int>();
+        
+        foreach (var position in positions)
+        {
+            Vector2Int currentPosition = new Vector2Int(position.x, position.y) * WalkerSize;
+            scaledPositions.Add(currentPosition);
+            for (int x = 0; x < WalkerSize; x++)
+            {
+                for (int y = 0; y < WalkerSize; y++)
+                {
+                    scaledPositions.Add(currentPosition + new Vector2Int(x, y));
+                }
+            }
+        }
+
+        return scaledPositions;
     }
 
     private void TileWalls(HashSet<Vector2Int> positions)

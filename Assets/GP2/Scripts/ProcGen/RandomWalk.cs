@@ -99,7 +99,7 @@ namespace GP2.ProcGen
 
             for (int i = 0; i < steps; i++)
             {
-                currentPosition += direction;
+                currentPosition += direction;;
                 path.Add(currentPosition);
             }
 
