@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using GP2.ProcGen;
+using Pathfinding;
 using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -25,6 +26,9 @@ public class DungeonGenerator : MonoBehaviour
     public int CorridorIterations;
     public int CorridorLength;
     public bool DeadEnds;
+
+    [Header("A Star Pathfinding")]
+    public LayerMask LayerMask;
 
     private DungeonTiler DungeonTiler;
     private DungeonRoomGenerator DungeonRoomGenerator;
@@ -50,6 +54,7 @@ public class DungeonGenerator : MonoBehaviour
         // Place this in dungeon tiler
         BoundsInt bounds = DungeonTiler.WallTilemap.cellBounds;
         DungeonTiler.GenerateBackground(bounds);
+        StartCoroutine(GenerateGridGraph(bounds));
     }
 
     public void GenerateRoomsOnly()
@@ -106,6 +111,48 @@ public class DungeonGenerator : MonoBehaviour
         DungeonTiler.TileWalls(wallPositions);
         
         DungeonRoomGenerator.GenerateRooms(DungeonRooms, wallPositions);
+        
+        
+    }
+
+    public IEnumerator GenerateGridGraph(BoundsInt bounds)
+    {
+        // This holds all graph data
+        AstarData data = AstarPath.active.data;
+
+        // This creates a Grid Graph
+        GridGraph gg = data.AddGraph(typeof(GridGraph)) as GridGraph;
+        
+        // Set grid
+        gg.SetGridShape(InspectorGridMode.Grid);
+        gg.is2D = true;
+
+        // Setup a grid graph with some values
+        int width = bounds.size.x * 2;
+        int depth = bounds.size.y * 2;
+        float nodeSize = 0.5f;
+
+        gg.center = bounds.center;
+        gg.center.z = 0;
+
+        // Updates internal size from the above values
+        gg.SetDimensions(width, depth, nodeSize);
+        
+        gg.collision.use2D = true;
+        gg.collision.collisionCheck = true;
+        
+        gg.collision.diameter = 0.4f;
+        gg.collision.type = ColliderType.Sphere;
+        
+        gg.showMeshOutline = true;
+        gg.showMeshSurface = true;
+
+        gg.collision.mask = LayerMask;
+
+        yield return null;
+        
+        // Scans all graphs
+        AstarPath.active.Scan();
     }
 
     /* Generate and register room to RoomMap*/

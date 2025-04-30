@@ -6,12 +6,12 @@ public class DungeonRoomGenerator : MonoBehaviour
 {
     public DungeonRoomData[] PossibleRooms;
 
-    private DungeonTiler DungeonTiler;
+    public DungeonTiler DungeonTiler;
     
     // Start is called before the first frame update
     void Start()
     {
-        DungeonTiler = GetComponent<DungeonTiler>();
+        //DungeonTiler = GetComponent<DungeonTiler>();
     }
 
     public void GenerateRooms(List<DungeonRoom> rooms, HashSet<Vector2Int> wallPositions)
