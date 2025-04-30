@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90dfb8abf41b5264c899a0b67e25474c, type: 3}
+  m_Name: GoblinCampRoomData
+  m_EditorClassIdentifier: 
+  WallRuleTile: {fileID: 11400000, guid: 5b62d0a37334d1f46a77ac60682a7290, type: 2}
+  FloorRuleTile: {fileID: 11400000, guid: aa3a7809ca307124f84c4b516976df1a, type: 2}
+  Prefabs: []

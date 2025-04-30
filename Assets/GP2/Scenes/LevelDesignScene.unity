@@ -209,7 +209,7 @@ MonoBehaviour:
   FloorTilemap: {fileID: 2127609176}
   DefaultFloorRuleTile: {fileID: 11400000, guid: 53c151e0c3a952a4aae8a3d95fbb9c11, type: 2}
   WallTilemap: {fileID: 1334382597}
-  DefaultWallRuleTile: {fileID: 11400000, guid: f9b9f59d4b0cda84781754bd8c3bfbfa, type: 2}
+  DefaultWallRuleTile: {fileID: 11400000, guid: ada3feed3d19fcf458135c7a67bb5e58, type: 2}
   BackgroundTilemap: {fileID: 1562399709}
   DefaultBackgroundRuleTile: {fileID: 11400000, guid: ada3feed3d19fcf458135c7a67bb5e58, type: 2}
 --- !u!114 &266762961
@@ -226,6 +226,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PossibleRooms:
   - {fileID: 11400000, guid: c11e0a9134551af4a87e207c0f292cf9, type: 2}
+  - {fileID: 11400000, guid: 1ba9c0c9b8af7e9498aeea45988d5a8c, type: 2}
+  - {fileID: 11400000, guid: 0a9822f2d20d7b142be7a8294653abd6, type: 2}
 --- !u!1 &400489667
 GameObject:
   m_ObjectHideFlags: 0
