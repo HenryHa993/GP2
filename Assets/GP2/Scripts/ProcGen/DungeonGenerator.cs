@@ -28,9 +28,15 @@ public class DungeonGenerator : MonoBehaviour
 
     private DungeonTiler DungeonTiler;
 
+    private List<DungeonRoom> DungeonRooms;
+
     private void Start()
     {
         DungeonTiler = GetComponent<DungeonTiler>();
+        
+        // Initialise dungeon room
+        DungeonRooms = new List<DungeonRoom>();
+        
         Generate();
     }
 
@@ -38,6 +44,8 @@ public class DungeonGenerator : MonoBehaviour
     public void Generate()
     {
         GenerateRoomsWithCorridors();
+        //qGenerateRoomsOnly();
+        // todo
         // Place this in dungeon tiler
         BoundsInt bounds = DungeonTiler.WallTilemap.cellBounds;
         DungeonTiler.GenerateBackground(bounds);
@@ -65,64 +73,24 @@ public class DungeonGenerator : MonoBehaviour
     
     public void GenerateRoomsWithCorridors()
     {
-        HashSet<Vector2Int> floorPositions = new HashSet<Vector2Int>();
         HashSet<Vector2Int> roomPositions = new HashSet<Vector2Int>();
         
-        // Generate corridors to get positions for potential room placement
+        // Generate corridors and populate roomPositions
         List<Vector2Int> corridorPositions =
             RandomWalk.CorridorWalkWithIterations(roomPositions, StartPosition, CorridorIterations, CorridorLength);
         
         // Filter out a random subset of room positions from corridor generations
-        int num = Mathf.RoundToInt(RoomPercent * roomPositions.Count);
-        for (int i = 0; i < roomPositions.Count; i++)
-        {
-            Vector2Int roomPosition = roomPositions.ElementAt(Random.Range(0, roomPositions.Count));
-            floorPositions.Add(roomPosition);
-            roomPositions.Remove(roomPosition);
-        }
+        HashSet<Vector2Int> floorPositions = GetRandomRoomSubset(roomPositions);
         
         // Generate rooms for dead-ends if false
-        // I might be able to return dead ends when generating the corridors themselves
-        // If direction taken in the next iteration is the inverse of the last, that start position is a dead-end.
         if (!DeadEnds)
         {
-            HashSet<Vector2Int> deadEnds = new HashSet<Vector2Int>();
-            
-            // Todo put this in its own method
-            // Identify dead-ends by checking if they have just one neighbour
-            foreach(var position in corridorPositions)
-            {
-                // Avoid checking positions already added
-                if (floorPositions.Contains(position))
-                {
-                    continue;
-                }
-                    
-                int neighbourCount = 0;
-                foreach (var direction in Direction2D.Directions)
-                {
-                    // If contains neighbour, increase count
-                    if (corridorPositions.Contains(position + direction))
-                    {
-                        // If neighbour count larger than 1, iterate next position
-                        if (++neighbourCount > 1)
-                        {
-                            break;
-                        }
-                    }
-                }
-
-                if (neighbourCount == 1)
-                {
-                    deadEnds.Add(position);
-                }
-            }
-            
+            HashSet<Vector2Int> deadEnds = GetDeadEnds(corridorPositions);
             floorPositions.UnionWith(deadEnds);
         }
         
-        // Generate rooms based on positions
-        floorPositions.UnionWith(RandomWalk.WalkAtLocations(floorPositions, Iterations, StepsPerIteration, RandomStart));
+        // Generate rooms here
+        floorPositions.UnionWith(GenerateAndRegisterRooms(floorPositions));
         
         // Union with corridor positions
         floorPositions.UnionWith(corridorPositions);
@@ -137,7 +105,84 @@ public class DungeonGenerator : MonoBehaviour
         DungeonTiler.TileWalls(wallPositions);
     }
 
-    /* Scale tiles to adjust for walker size.*/
+    /* Generate and register room to RoomMap*/
+    // todo you need to generate wall positions
+    public HashSet<Vector2Int> GenerateAndRegisterRooms(IEnumerable<Vector2Int> roomPositions)
+    {
+        HashSet<Vector2Int> allRoomPositions = new HashSet<Vector2Int>();
+        
+        foreach (Vector2Int position in roomPositions)
+        {
+            // Generate room based on generator parameters
+            HashSet<Vector2Int> floorPositions = RandomWalk.WalkWithIterations(position, Iterations, StepsPerIteration, RandomStart);
+            
+            // Process wall positions
+            HashSet<Vector2Int> wallPositions = GetWallPositions(floorPositions);
+            
+            // Register room
+            DungeonRooms.Add(new DungeonRoom(floorPositions, wallPositions));
+            
+            // todo remove this
+            allRoomPositions.UnionWith(floorPositions);
+        }
+
+        return allRoomPositions;
+    }
+
+    #region Utilities
+    public HashSet<Vector2Int> GetRandomRoomSubset(HashSet<Vector2Int> positions)
+    {
+        HashSet<Vector2Int> randomPositions = new HashSet<Vector2Int>();
+        
+        // Filter out a random subset of room positions from corridor generations
+        int num = Mathf.RoundToInt(RoomPercent * positions.Count);
+        for (int i = 0; i < num; i++)
+        {
+            Vector2Int roomPosition = positions.ElementAt(Random.Range(0, positions.Count));
+            randomPositions.Add(roomPosition);
+            positions.Remove(roomPosition);
+        }
+
+        return randomPositions;
+    }
+
+    /* Get all dead-ends from a collection of positions.*/
+    public HashSet<Vector2Int> GetDeadEnds(IEnumerable<Vector2Int> positions)
+    {
+        HashSet<Vector2Int> deadEnds = new HashSet<Vector2Int>();
+        
+        foreach(var position in positions)
+        {
+            if (IsDeadEnd(positions, position))
+            {
+                deadEnds.Add(position);
+            }
+        }
+
+        return deadEnds;
+    }
+
+    /* Check if a position is a dead-end*/
+    public bool IsDeadEnd(IEnumerable<Vector2Int> positions, Vector2Int position)
+    {
+        int neighbourCount = 0;
+        foreach (var direction in Direction2D.Directions)
+        {
+            // If contains neighbour, increase count
+            if (positions.Contains(position + direction))
+            {
+                // If neighbour count larger than 1, iterate next position
+                if (++neighbourCount > 1)
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /* Scale tile placements positions depending on the walker size.*/
     public HashSet<Vector2Int> ScaleTilePositions(IEnumerable<Vector2Int> positions)
     {
         HashSet<Vector2Int> scaledPositions = new HashSet<Vector2Int>();
@@ -158,7 +203,8 @@ public class DungeonGenerator : MonoBehaviour
         return scaledPositions;
     }
 
-    private HashSet<Vector2Int> GetWallPositions(IEnumerable<Vector2Int> positions)
+    /* Return tilemap positions with only a single neighbour.*/
+    public HashSet<Vector2Int> GetWallPositions(IEnumerable<Vector2Int> positions)
     {
         HashSet<Vector2Int> wallPositions = new HashSet<Vector2Int>();
         
@@ -176,4 +222,5 @@ public class DungeonGenerator : MonoBehaviour
         
         return wallPositions;
     }
+    #endregion
 }

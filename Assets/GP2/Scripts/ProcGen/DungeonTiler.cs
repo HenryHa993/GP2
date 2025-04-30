@@ -7,15 +7,25 @@ public class DungeonTiler : MonoBehaviour
 {
     [Header("Floor Tiles")]
     public Tilemap FloorTilemap;
-    public Tile FloorTile;
+    public RuleTile DefaultFloorRuleTile;
     
     [Header("Wall Tiles")]
     public Tilemap WallTilemap;
-    public Tile WallTile;
+    public RuleTile DefaultWallRuleTile;
     
     [Header("Background Tiles")]
     public Tilemap BackgroundTilemap;
-    public RuleTile BackgroundRuleTile;
+    public RuleTile DefaultBackgroundRuleTile;
+    
+    public void TileFloor(IEnumerable<Vector2Int> positions, RuleTile ruleTile)
+    {
+        FloorTilemap.ClearAllTiles();
+
+        foreach (var position in positions)
+        {
+            FloorTilemap.SetTile(new Vector3Int(position.x, position.y), ruleTile);
+        }
+    }
     
     public void TileFloor(IEnumerable<Vector2Int> positions)
     {
@@ -23,7 +33,17 @@ public class DungeonTiler : MonoBehaviour
 
         foreach (var position in positions)
         {
-            FloorTilemap.SetTile(new Vector3Int(position.x, position.y), FloorTile);
+            FloorTilemap.SetTile(new Vector3Int(position.x, position.y), DefaultFloorRuleTile);
+        }
+    }
+    
+    public void TileWalls(HashSet<Vector2Int> positions, RuleTile ruleTile)
+    {
+        WallTilemap.ClearAllTiles();
+        
+        foreach (var position in positions)
+        {
+            WallTilemap.SetTile(new Vector3Int(position.x, position.y), ruleTile);
         }
     }
     
@@ -33,7 +53,7 @@ public class DungeonTiler : MonoBehaviour
         
         foreach (var position in positions)
         {
-            WallTilemap.SetTile(new Vector3Int(position.x, position.y), WallTile);
+            WallTilemap.SetTile(new Vector3Int(position.x, position.y), DefaultWallRuleTile);
         }
     }
     
@@ -47,7 +67,7 @@ public class DungeonTiler : MonoBehaviour
         {
             for (int y = bottomBound.y; y < topBound.y; y++)
             {
-                BackgroundTilemap.SetTile(new Vector3Int(x, y), BackgroundRuleTile);
+                BackgroundTilemap.SetTile(new Vector3Int(x, y), DefaultBackgroundRuleTile);
             }
         }
     }
