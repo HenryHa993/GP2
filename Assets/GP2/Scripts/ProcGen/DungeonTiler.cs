@@ -19,7 +19,7 @@ public class DungeonTiler : MonoBehaviour
     
     public void TileFloor(IEnumerable<Vector2Int> positions, RuleTile ruleTile)
     {
-        FloorTilemap.ClearAllTiles();
+        //FloorTilemap.ClearAllTiles();
 
         foreach (var position in positions)
         {
@@ -39,7 +39,7 @@ public class DungeonTiler : MonoBehaviour
     
     public void TileWalls(HashSet<Vector2Int> positions, RuleTile ruleTile)
     {
-        WallTilemap.ClearAllTiles();
+        //WallTilemap.ClearAllTiles();
         
         foreach (var position in positions)
         {

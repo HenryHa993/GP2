@@ -6,7 +6,6 @@ public class DungeonRoomGenerator : MonoBehaviour
 {
     public DungeonRoomData[] PossibleRooms;
 
-    private DungeonGenerator DungeonGenerator;
     private DungeonTiler DungeonTiler;
     
     // Start is called before the first frame update
@@ -15,12 +14,21 @@ public class DungeonRoomGenerator : MonoBehaviour
         DungeonTiler = GetComponent<DungeonTiler>();
     }
 
+    public void GenerateRooms(List<DungeonRoom> rooms, HashSet<Vector2Int> wallPositions)
+    {
+        foreach (DungeonRoom room in rooms)
+        {
+            GenerateRoom(room, wallPositions);
+        }
+    }
+
     public void GenerateRoom(DungeonRoom room, HashSet<Vector2Int> wallPositions)
     {
         // Randomly assign a room
         DungeonRoomData roomType = PossibleRooms[Random.Range(0, PossibleRooms.Length)];
         
         // todo find the intersect with between the levels wallpositions and the rooms and then tile them.
+        room.WallPositions.IntersectWith(wallPositions);
         
         // Paint the walls with a new rule tile
         DungeonTiler.TileWalls(room.WallPositions, roomType.WallRuleTile);

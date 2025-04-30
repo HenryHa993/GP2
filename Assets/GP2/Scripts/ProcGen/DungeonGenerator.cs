@@ -27,12 +27,13 @@ public class DungeonGenerator : MonoBehaviour
     public bool DeadEnds;
 
     private DungeonTiler DungeonTiler;
-
+    private DungeonRoomGenerator DungeonRoomGenerator;
     private List<DungeonRoom> DungeonRooms;
 
     private void Start()
     {
         DungeonTiler = GetComponent<DungeonTiler>();
+        DungeonRoomGenerator = GetComponent<DungeonRoomGenerator>();
         
         // Initialise dungeon room
         DungeonRooms = new List<DungeonRoom>();
@@ -103,6 +104,8 @@ public class DungeonGenerator : MonoBehaviour
         
         HashSet<Vector2Int> wallPositions = GetWallPositions(floorPositions);
         DungeonTiler.TileWalls(wallPositions);
+        
+        DungeonRoomGenerator.GenerateRooms(DungeonRooms, wallPositions);
     }
 
     /* Generate and register room to RoomMap*/
@@ -116,14 +119,15 @@ public class DungeonGenerator : MonoBehaviour
             // Generate room based on generator parameters
             HashSet<Vector2Int> floorPositions = RandomWalk.WalkWithIterations(position, Iterations, StepsPerIteration, RandomStart);
             
+            allRoomPositions.UnionWith(floorPositions);
+
+            floorPositions = ScaleTilePositions(floorPositions);
+
             // Process wall positions
             HashSet<Vector2Int> wallPositions = GetWallPositions(floorPositions);
             
             // Register room
             DungeonRooms.Add(new DungeonRoom(floorPositions, wallPositions));
-            
-            // todo remove this
-            allRoomPositions.UnionWith(floorPositions);
         }
 
         return allRoomPositions;

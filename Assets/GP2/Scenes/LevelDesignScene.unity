@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 266762957}
   - component: {fileID: 266762959}
   - component: {fileID: 266762960}
+  - component: {fileID: 266762961}
   m_Layer: 0
   m_Name: DungeonGenerator
   m_TagString: Untagged
@@ -211,6 +212,20 @@ MonoBehaviour:
   DefaultWallRuleTile: {fileID: 11400000, guid: f9b9f59d4b0cda84781754bd8c3bfbfa, type: 2}
   BackgroundTilemap: {fileID: 1562399709}
   DefaultBackgroundRuleTile: {fileID: 11400000, guid: ada3feed3d19fcf458135c7a67bb5e58, type: 2}
+--- !u!114 &266762961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 266762956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b49e700bc60c8b9418ea3b12231fa7e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PossibleRooms:
+  - {fileID: 11400000, guid: c11e0a9134551af4a87e207c0f292cf9, type: 2}
 --- !u!1 &400489667
 GameObject:
   m_ObjectHideFlags: 0
@@ -629,7 +644,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -977,7 +992,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
