@@ -148,7 +148,9 @@ public class DungeonGenerator : MonoBehaviour
         gg.showMeshSurface = true;
 
         gg.collision.mask = LayerMask;
-
+        
+        AstarPath.active.Scan();
+        
         yield return null;
         
         // Scans all graphs

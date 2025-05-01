@@ -30,16 +30,16 @@ namespace GP2.GOAP
         {
             IAstarAI pathfinding = agent.Transform.gameObject.GetComponent<IAstarAI>();
             //pathfinding.
+            if (AstarPath.active.isScanning)
+            {
+                return agent.Transform.position;
+            }
             
             Vector3 random = Random.insideUnitCircle * 5f;
             Vector2 position = agent.Transform.position + random;
+            
             NNInfoInternal node = AstarPath.active.graphs[0].GetNearest(position);
-
-            /*if (!node.node.Walkable)
-            {
-                return agent.Transform.position;
-            }*/
-
+            
             while (!node.node.Walkable)
             {
                 random = Random.insideUnitCircle * 5f;
