@@ -56,10 +56,25 @@ public class DungeonTiler : MonoBehaviour
             WallTilemap.SetTile(new Vector3Int(position.x, position.y), DefaultWallRuleTile);
         }
     }
-    
-    /* Generate a background based off bounds.*/
-    public void GenerateBackground(BoundsInt bounds)
+
+    public void TileBackground(IEnumerable<Vector2Int> positions)
     {
+        BackgroundTilemap.ClearAllTiles();
+
+        foreach (var position in positions)
+        {
+            BackgroundTilemap.SetTile(new Vector3Int(position.x, position.y), DefaultBackgroundRuleTile);
+        }
+    }
+    
+    // todo maybe move this into the dungeon gen
+    /* Generate a background based off bounds.*/
+    public void GenerateBackground(IEnumerable<Vector2Int> dungeonFloor)
+    {
+        HashSet<Vector2Int> backgroundPositions = new HashSet<Vector2Int>();
+
+        BoundsInt bounds = WallTilemap.cellBounds;
+        
         Vector3Int topBound = new Vector3Int(bounds.max.x, bounds.max.y);
         Vector3Int bottomBound = new Vector3Int(bounds.min.x, bounds.min.y);
 
@@ -67,8 +82,13 @@ public class DungeonTiler : MonoBehaviour
         {
             for (int y = bottomBound.y; y < topBound.y; y++)
             {
-                BackgroundTilemap.SetTile(new Vector3Int(x, y), DefaultBackgroundRuleTile);
+                backgroundPositions.Add(new Vector2Int(x, y));
+                //BackgroundTilemap.SetTile(new Vector3Int(x, y), DefaultBackgroundRuleTile);
             }
         }
+        
+        backgroundPositions.ExceptWith(dungeonFloor);
+        
+        TileBackground(backgroundPositions);
     }
 }

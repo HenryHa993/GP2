@@ -37,7 +37,6 @@ namespace GP2.GOAP
             
             Vector3 random = Random.insideUnitCircle * 5f;
             Vector2 position = agent.Transform.position + random;
-            
             NNInfoInternal node = AstarPath.active.graphs[0].GetNearest(position);
             
             while (!node.node.Walkable)

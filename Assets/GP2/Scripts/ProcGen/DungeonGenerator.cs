@@ -52,9 +52,8 @@ public class DungeonGenerator : MonoBehaviour
         //qGenerateRoomsOnly();
         // todo
         // Place this in dungeon tiler
-        BoundsInt bounds = DungeonTiler.WallTilemap.cellBounds;
-        DungeonTiler.GenerateBackground(bounds);
-        StartCoroutine(GenerateGridGraph(bounds));
+        
+        StartCoroutine(GenerateGridGraph(DungeonTiler.WallTilemap.cellBounds));
     }
 
     public void GenerateRoomsOnly()
@@ -65,6 +64,8 @@ public class DungeonGenerator : MonoBehaviour
         
         HashSet<Vector2Int> wallPositions = GetWallPositions(positions);
         DungeonTiler.TileWalls(wallPositions);
+        
+        DungeonTiler.GenerateBackground(positions);
     }
 
     public void GenerateCorridorsOnly()
@@ -75,6 +76,8 @@ public class DungeonGenerator : MonoBehaviour
         
         HashSet<Vector2Int> wallPositions = GetWallPositions(corridorPositions);
         DungeonTiler.TileWalls(wallPositions);
+        
+        DungeonTiler.GenerateBackground(corridorPositions);
     }
     
     public void GenerateRoomsWithCorridors()
@@ -112,7 +115,7 @@ public class DungeonGenerator : MonoBehaviour
         
         DungeonRoomGenerator.GenerateRooms(DungeonRooms, wallPositions);
         
-        
+        DungeonTiler.GenerateBackground(floorPositions);
     }
 
     public IEnumerator GenerateGridGraph(BoundsInt bounds)
