@@ -32,7 +32,9 @@ public class DungeonGenerator : MonoBehaviour
 
     private DungeonTiler DungeonTiler;
     private DungeonRoomGenerator DungeonRoomGenerator;
+    
     private List<DungeonRoom> DungeonRooms;
+    public HashSet<Vector2Int> DungeonFloor;
 
     private void Start()
     {
@@ -61,6 +63,8 @@ public class DungeonGenerator : MonoBehaviour
         HashSet<Vector2Int> positions =
             RandomWalk.WalkWithIterations(StartPosition, Iterations, StepsPerIteration, true);
         DungeonTiler.TileFloor(positions);
+
+        DungeonFloor = positions;
         
         HashSet<Vector2Int> wallPositions = GetWallPositions(positions);
         DungeonTiler.TileWalls(wallPositions);
@@ -73,6 +77,8 @@ public class DungeonGenerator : MonoBehaviour
         List<Vector2Int> corridorPositions =
             RandomWalk.CorridorWalkWithIterations(StartPosition, CorridorIterations, CorridorLength);
         DungeonTiler.TileFloor(corridorPositions);
+        DungeonFloor = new HashSet<Vector2Int>();
+        DungeonFloor.UnionWith(corridorPositions);
         
         HashSet<Vector2Int> wallPositions = GetWallPositions(corridorPositions);
         DungeonTiler.TileWalls(wallPositions);
@@ -109,6 +115,8 @@ public class DungeonGenerator : MonoBehaviour
         
         // Tile map
         DungeonTiler.TileFloor(floorPositions);
+        
+        DungeonFloor = floorPositions;
         
         HashSet<Vector2Int> wallPositions = GetWallPositions(floorPositions);
         DungeonTiler.TileWalls(wallPositions);

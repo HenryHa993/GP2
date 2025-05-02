@@ -76,8 +76,6 @@ namespace GP2.GOAP
                 pathfinding.destination = currentTarget.Position;
                 pathfinding.SearchPath();
             }
-
-            //transform.position = Vector3.MoveTowards(transform.position, new Vector3(currentTarget.Position.x, transform.position.y, currentTarget.Position.z), Time.deltaTime);
         }
 
         private void OnDrawGizmos()

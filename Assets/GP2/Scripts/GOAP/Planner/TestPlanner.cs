@@ -28,7 +28,8 @@ namespace GP2.GOAP
 
         private void Start()
         {
-            this.provider.RequestGoal<IdleGoal, PickupFoodGoal>();
+            //this.provider.RequestGoal<IdleGoal, PickupFoodGoal>();
+            provider.RequestGoal<WanderGoal>();
         }
 
         private void OnEnable()
@@ -43,13 +44,15 @@ namespace GP2.GOAP
 
         private void OnActionEnd(IAction action)
         {
-            if (this.Data.Hunger > 50)
+            /*if (this.Data.Hunger > 50)
             {
                 this.provider.RequestGoal<EatGoal>();
                 return;
             }
             
-            this.provider.RequestGoal<IdleGoal, PickupFoodGoal>();
+            this.provider.RequestGoal<IdleGoal, PickupFoodGoal>();*/
+            
+            provider.RequestGoal<WanderGoal>();
         }
     }
 

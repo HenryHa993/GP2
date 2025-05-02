@@ -11,9 +11,10 @@ namespace GP2.GOAP
         public override IAgentTypeConfig Create()
         {
             var builder = new AgentTypeBuilder("TestAgent");
-            builder.AddCapability<IdleCapabilityFactory>();
+            /*builder.AddCapability<IdleCapabilityFactory>();
             builder.AddCapability<FoodCapability>();
-            builder.AddCapability<EatCapabilityFactory>();
+            builder.AddCapability<EatCapabilityFactory>();*/
+            builder.AddCapability<WanderCapabilityFactory>();
             return builder.Build();
         }
     }

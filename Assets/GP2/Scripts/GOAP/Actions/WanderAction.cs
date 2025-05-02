@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace GP2.GOAP
 {
-    [GoapId("Idle-b8572dac-098c-41a9-8d90-dbf69dd9ed30")]
-    public class IdleAction : GoapActionBase<IdleAction.Data>
+    [GoapId("Wander-d7fa7912-b24c-4e4d-8d79-d0cff8281623")]
+    public class WanderAction : GoapActionBase<WanderAction.Data>
     {
         // This method is called when the action is created
         // This method is optional and can be removed
@@ -25,7 +25,7 @@ namespace GP2.GOAP
         // This method is optional and can be removed
         public override void Start(IMonoAgent agent, Data data)
         {
-            data.Timer = Random.Range(0.5f, 1.5f);
+            data.Timer = Random.Range(1f, 3f);
         }
 
         // This method is called once before the action is performed
@@ -47,7 +47,6 @@ namespace GP2.GOAP
             
             // Return continue to keep the action running
             return ActionRunState.Continue;
-            //return ActionRunState.Completed;
         }
 
         // This method is called when the action is completed
