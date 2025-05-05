@@ -52,6 +52,7 @@ public class DungeonRoomGenerator : MonoBehaviour
         {
             return;
         }
+        
         int unitsSpawned = 0;
         float randomNum = Random.Range(0f, 1f);
 

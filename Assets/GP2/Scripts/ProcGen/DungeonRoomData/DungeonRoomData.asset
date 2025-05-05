@@ -16,6 +16,8 @@ MonoBehaviour:
   FloorRuleTile: {fileID: 11400000, guid: 17894367ddd862e409f45b48218d2f54, type: 2}
   Prefabs: []
   Units:
-  - {fileID: 2928802331062983841, guid: eee6ec7032539074da194c57b674244a, type: 3}
-  SpawnProbability: 0
-  MaxUnitsPerRoom: 0
+  - {fileID: 2928802331062983841, guid: 781d29ad722fc0d4c86caec9eef65e98, type: 3}
+  - {fileID: 2928802331062983841, guid: 28ed2b3b9c2f76b419acdfe5c30877b5, type: 3}
+  - {fileID: 2928802331062983841, guid: 95a23d436733e2b41afecd012b46f597, type: 3}
+  SpawnProbability: 1
+  MaxUnitsPerRoom: 10
