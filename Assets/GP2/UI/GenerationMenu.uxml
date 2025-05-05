@@ -8,7 +8,7 @@
                     <ui:Label tabindex="-1" text="Random Walk" parse-escape-sequences="true" display-tooltip-when-elided="true" class="MenuTitle" />
                     <ui:SliderInt label="Iterations" high-value="100" show-input-field="true" page-size="0" low-value="1" inverted="false" focusable="false" name="RWIterations" style="-unity-font-style: bold; color: rgb(255, 255, 255); -unity-text-align: upper-center;" />
                     <ui:SliderInt label="Steps Per Iteration" high-value="100" show-input-field="true" low-value="1" name="RWSteps" />
-                    <ui:Slider label="Slider" high-value="1" show-input-field="true" name="RWRoomRatio" />
+                    <ui:Slider label="Room Ratio" high-value="1" show-input-field="true" name="RWRoomRatio" />
                     <ui:Toggle label="Random Start" name="RWRandomStart" value="true" />
                     <ui:Label tabindex="-1" text="Corridor Walk" parse-escape-sequences="true" display-tooltip-when-elided="true" class="MenuTitle" />
                     <ui:SliderInt label="Iterations" high-value="100" name="CWIterations" low-value="1" show-input-field="true" />

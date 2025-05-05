@@ -35,33 +35,16 @@ public class BehaviourTreeBase : MonoBehaviour
         BT.Evaluate();
     }
 
-    Blackboard CreateBlackboard()
+    protected virtual Blackboard CreateBlackboard()
     {
         Blackboard blackboard = new Blackboard();
         blackboard.Set<float>("CurrentWaitTime", 5f);
         return blackboard;
     }
 
-    Node CreateBehaviourTree()
+    protected virtual Node CreateBehaviourTree()
     {
-        return new Selector(
-            new Filter(
-                () => IsEnemyInRange(EnemyTag, 3f), // Attack range
-                new Sequence(
-                    /*new Action(() =>
-                    {
-                        MoveTo(transform.position);
-                    }),*/
-                    WaitForSeconds(1f),
-                    //AttackEnemy())
-                    AttackNearbyEnemies(EnemyTag, 3f)
-                )),
-            new Filter(
-                () => IsEnemyInRange(EnemyTag, 10f), // Chasing range
-                ChaseNearestEnemy(EnemyTag)
-                ),
-            Wander(5f, 5f)
-            );
+        return Action.Nothing;
     }
 
     protected Node AttackNearbyEnemies(string enemyTag, float radius)
@@ -119,10 +102,10 @@ public class BehaviourTreeBase : MonoBehaviour
             .Any(adventurer => Vector2.Distance(adventurer.transform.position, transform.position) <= range);
     }
 
-    protected Node Wander(float range, float waitTime)
+    protected Node Wander(float range, float minWait, float maxWait)
     {
         return new Sequence(
-            WaitForSeconds(waitTime),
+            WaitForSeconds(Random.Range(minWait, maxWait)),
             new Action(() => MoveTo(GetRandomPosition(range)))
         );
     }

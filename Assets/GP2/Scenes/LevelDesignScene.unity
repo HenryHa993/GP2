@@ -196,6 +196,9 @@ MonoBehaviour:
   LayerMask:
     serializedVersion: 2
     m_Bits: 8
+  OnGeneration:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &266762960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -211,7 +214,7 @@ MonoBehaviour:
   FloorTilemap: {fileID: 2127609176}
   DefaultFloorRuleTile: {fileID: 11400000, guid: 53c151e0c3a952a4aae8a3d95fbb9c11, type: 2}
   WallTilemap: {fileID: 1334382597}
-  DefaultWallRuleTile: {fileID: 11400000, guid: f9b9f59d4b0cda84781754bd8c3bfbfa, type: 2}
+  DefaultWallRuleTile: {fileID: 11400000, guid: ada3feed3d19fcf458135c7a67bb5e58, type: 2}
   BackgroundTilemap: {fileID: 1562399709}
   DefaultBackgroundRuleTile: {fileID: 11400000, guid: ada3feed3d19fcf458135c7a67bb5e58, type: 2}
 --- !u!114 &266762961

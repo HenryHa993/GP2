@@ -19,5 +19,6 @@ MonoBehaviour:
   - {fileID: 2928802331062983841, guid: eee6ec7032539074da194c57b674244a, type: 3}
   - {fileID: 2928802331062983841, guid: 53ed627f65ff38d40bc752c0f0f49619, type: 3}
   - {fileID: 2928802331062983841, guid: 293d1adceba9eea4fab4867c239c72ee, type: 3}
+  - {fileID: 2928802331062983841, guid: 0bf47e9b97494204dad0d4aeaedb508a, type: 3}
   SpawnProbability: 1
-  MaxUnitsPerRoom: 5
+  MaxUnitsPerRoom: 15

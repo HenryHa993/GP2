@@ -14,11 +14,11 @@ GameObject:
   - component: {fileID: 6154127832393818839}
   - component: {fileID: 948290710025297181}
   - component: {fileID: 5967839131980963296}
-  - component: {fileID: 8112214322666696410}
-  - component: {fileID: 2506280998352780839}
+  - component: {fileID: -7377109862948810964}
+  - component: {fileID: 29922674395719257}
   m_Layer: 7
-  m_Name: Naked Dobby
-  m_TagString: Monster
+  m_Name: Lancer
+  m_TagString: Adventurer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -79,7 +79,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: -950346913, guid: 578b3a6e6b44d904197a4b897c4b44b5, type: 3}
+  m_Sprite: {fileID: 386266049, guid: 578b3a6e6b44d904197a4b897c4b44b5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -200,8 +200,25 @@ MonoBehaviour:
   alwaysDrawGizmos: 0
   slowWhenNotFacingTarget: 1
   whenCloseToDestination: 0
-  constrainInsideGraph: 0
---- !u!58 &8112214322666696410
+  constrainInsideGraph: 1
+--- !u!114 &-7377109862948810964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2928802331062983841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f2a6a87a07663b419eb2df0f8eb678e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Damage: 1
+  AttackLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
+  EnemyTag: Monster
+--- !u!58 &29922674395719257
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -236,20 +253,3 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.01
---- !u!114 &2506280998352780839
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2928802331062983841}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: befc627161d84e444b552cd9b39c418f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Damage: 1
-  AttackLayerMask:
-    serializedVersion: 2
-    m_Bits: 128
-  EnemyTag: Adventurer

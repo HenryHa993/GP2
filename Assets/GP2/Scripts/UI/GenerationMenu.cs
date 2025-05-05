@@ -42,6 +42,8 @@ public class GenerationMenu : MonoBehaviour
         CWDeadEnds = RootElement.Q<Toggle>("CWDeadEnds");
 
         GenerateButton = RootElement.Q<Button>("GenerateButton");
+        
+        SetupMenu();
 
         RWIterations.RegisterValueChangedCallback((evt) => generator.Iterations = evt.newValue);
         RWSteps.RegisterValueChangedCallback((evt) => generator.StepsPerIteration = evt.newValue);
@@ -69,6 +71,16 @@ public class GenerationMenu : MonoBehaviour
 
             IsPanelHidden = !IsPanelHidden;
         }
+    }
+
+    public void SetupMenu()
+    {
+        RWIterations.value = 20;
+        RWSteps.value = 10;
+        RWRoomRatio.value = 0.5f;
+        
+        CWIterations.value = 15;
+        CWSteps.value = 15;
     }
 
     private void Generate()
