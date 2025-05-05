@@ -23,6 +23,8 @@ public class HealthSystem : MonoBehaviour
 
         RB = GetComponent<Rigidbody2D>();
         SpriteRenderer = GetComponent<SpriteRenderer>();
+        
+        GameObject.FindGameObjectWithTag("DungeonGenerator").GetComponent<DungeonGenerator>().OnGeneration.AddListener(OnDeath);
     }
 
     // Update is called once per frame

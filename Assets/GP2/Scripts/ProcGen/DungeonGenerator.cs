@@ -5,6 +5,7 @@ using System.Linq;
 using GP2.ProcGen;
 using Pathfinding;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
@@ -35,24 +36,45 @@ public class DungeonGenerator : MonoBehaviour
     private List<DungeonRoom> DungeonRooms;
     public HashSet<Vector2Int> DungeonFloor;
 
+    private GridGraph PathfindingGraph;
+
+    public UnityEvent OnGeneration;
+
     private void Start()
     {
         DungeonTiler = GetComponent<DungeonTiler>();
         DungeonRoomGenerator = GetComponent<DungeonRoomGenerator>();
         
-        // Initialise dungeon room
-        DungeonRooms = new List<DungeonRoom>();
+        AstarData data = AstarPath.active.data;
+        PathfindingGraph = data.AddGraph(typeof(GridGraph)) as GridGraph;
         
         Generate();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKey(KeyCode.P))
+        {
+            OnGeneration.Invoke();
+            
+            DungeonTiler.FloorTilemap.ClearAllTiles();
+            DungeonTiler.WallTilemap.ClearAllTiles();
+            DungeonTiler.BackgroundTilemap.ClearAllTiles();
+        }
     }
 
     /* Determines generation type depending on settings. */
     public void Generate()
     {
+        OnGeneration.Invoke();
+        
+        DungeonTiler.FloorTilemap.ClearAllTiles();
+        DungeonTiler.WallTilemap.ClearAllTiles();
+        DungeonTiler.BackgroundTilemap.ClearAllTiles();
+
+        DungeonRooms = new List<DungeonRoom>();
+        
         GenerateRoomsWithCorridors();
-        //qGenerateRoomsOnly();
-        // todo
-        // Place this in dungeon tiler
         
         StartCoroutine(GenerateGridGraph(DungeonTiler.WallTilemap.cellBounds));
     }
@@ -127,37 +149,37 @@ public class DungeonGenerator : MonoBehaviour
 
     public IEnumerator GenerateGridGraph(BoundsInt bounds)
     {
-        // This holds all graph data
+        /*// This holds all graph data
         AstarData data = AstarPath.active.data;
 
         // This creates a Grid Graph
-        GridGraph gg = data.AddGraph(typeof(GridGraph)) as GridGraph;
+        GridGraph gg = data.AddGraph(typeof(GridGraph)) as GridGraph;*/
         
         // Set grid
-        gg.SetGridShape(InspectorGridMode.Grid);
-        gg.is2D = true;
+        PathfindingGraph.SetGridShape(InspectorGridMode.Grid);
+        PathfindingGraph.is2D = true;
 
         // Setup a grid graph with some values
         int width = bounds.size.x * 2;
         int depth = bounds.size.y * 2;
         float nodeSize = 0.5f;
 
-        gg.center = bounds.center;
-        gg.center.z = 0;
+        PathfindingGraph.center = bounds.center;
+        PathfindingGraph.center.z = 0;
 
         // Updates internal size from the above values
-        gg.SetDimensions(width, depth, nodeSize);
+        PathfindingGraph.SetDimensions(width, depth, nodeSize);
         
-        gg.collision.use2D = true;
-        gg.collision.collisionCheck = true;
+        PathfindingGraph.collision.use2D = true;
+        PathfindingGraph.collision.collisionCheck = true;
         
-        gg.collision.diameter = 0.4f;
-        gg.collision.type = ColliderType.Sphere;
+        PathfindingGraph.collision.diameter = 0.4f;
+        PathfindingGraph.collision.type = ColliderType.Sphere;
         
-        gg.showMeshOutline = true;
-        gg.showMeshSurface = true;
+        PathfindingGraph.showMeshOutline = true;
+        PathfindingGraph.showMeshSurface = true;
 
-        gg.collision.mask = LayerMask;
+        PathfindingGraph.collision.mask = LayerMask;
         
         AstarPath.active.Scan();
         

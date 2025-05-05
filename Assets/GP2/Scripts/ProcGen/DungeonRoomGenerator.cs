@@ -67,6 +67,7 @@ public class DungeonRoomGenerator : MonoBehaviour
             {
                 Instantiate(roomType.Units[Random.Range(0, roomType.Units.Length)], new Vector3(position.x, position.y),
                     Quaternion.identity);
+
                 unitsSpawned++;
             }
         }

@@ -15,6 +15,7 @@ public class DungeonCamera : MonoBehaviour
     // Start is called before the first frame update
     IEnumerator Start()
     {
+        yield return null;// WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
         
         MainCamera = GetComponent<Camera>();
