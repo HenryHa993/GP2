@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/* Information which encapsulates the details required to generate a room
+   in the level. Taken positions would have been used to place prefabs if
+   I had enough time.*/
 public struct DungeonRoom
 {
     public HashSet<Vector2Int> FloorPositions;

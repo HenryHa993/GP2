@@ -13,13 +13,8 @@ public class DungeonRoomGenerator : MonoBehaviour
     public DungeonTiler DungeonTiler;
     
     private System.Random random = new System.Random();
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        //DungeonTiler = GetComponent<DungeonTiler>();
-    }
 
+    /* Generate a collection of rooms.*/
     public void GenerateRooms(List<DungeonRoom> rooms, HashSet<Vector2Int> wallPositions)
     {
         foreach (DungeonRoom room in rooms)
@@ -28,9 +23,10 @@ public class DungeonRoomGenerator : MonoBehaviour
         }
     }
 
+    /* Generate the room flooring, walls and spawn units in them.*/
     public void GenerateRoom(DungeonRoom room, HashSet<Vector2Int> wallPositions)
     {
-        // Randomly assign a room
+        // Randomly assign a room type
         DungeonRoomData roomType = PossibleRooms[Random.Range(0, PossibleRooms.Length)];
         
         // todo find the intersect with between the levels wall positions and the rooms and then tile them.
@@ -46,6 +42,7 @@ public class DungeonRoomGenerator : MonoBehaviour
         SpawnUnits(room, roomType);
     }
 
+    /* Randomly spawn units within the room. */
     public void SpawnUnits(DungeonRoom room, DungeonRoomData roomType)
     {
         if (roomType.MaxUnitsPerRoom <= 0 || roomType.Units.Length == 0 || roomType.SpawnProbability == 0f)
@@ -54,11 +51,15 @@ public class DungeonRoomGenerator : MonoBehaviour
         }
         
         int unitsSpawned = 0;
+        /* Probability of each floor tile spawning a unit is a nice-to-have which allows for more
+           fine control. However, this was not really helpful in final implementation as I wanted
+           as I wanted the maximum amount of units within each room.*/
         float randomNum = Random.Range(0f, 1f);
 
         foreach (Vector2Int position in room.FloorPositions.OrderBy(_ => random.Next()))
         {
-            if (unitsSpawned > roomType.MaxUnitsPerRoom)
+            // Stop if maximum reached.
+            if (unitsSpawned >= roomType.MaxUnitsPerRoom)
             {
                 return;
             }

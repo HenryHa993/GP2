@@ -6,6 +6,8 @@ using UnityEngine;
 
 namespace GP2.ProcGen
 {
+    /* Random walk algorithm, responsible for generating the layout of
+       the dungeon rooms and corridors.*/
     public static class RandomWalk
     {
         /* Perform RandomWalkWithIterations at select locations.*/
@@ -49,7 +51,6 @@ namespace GP2.ProcGen
             
             for (int i = 0; i < steps; i++)
             {
-                // todo: check if hash set has a position, if ignore
                 Vector2Int newPosition  = prevPosition + Direction2D.GetRandomDirection();
                 path.Add(newPosition);
                 prevPosition = newPosition;

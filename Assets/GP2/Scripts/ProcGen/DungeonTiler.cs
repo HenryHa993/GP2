@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+/* Responsible for tiling the level.*/
 public class DungeonTiler : MonoBehaviour
 {
     [Header("Floor Tiles")]
@@ -19,8 +20,6 @@ public class DungeonTiler : MonoBehaviour
     
     public void TileFloor(IEnumerable<Vector2Int> positions, RuleTile ruleTile)
     {
-        //FloorTilemap.ClearAllTiles();
-
         foreach (var position in positions)
         {
             FloorTilemap.SetTile(new Vector3Int(position.x, position.y), ruleTile);
@@ -39,8 +38,6 @@ public class DungeonTiler : MonoBehaviour
     
     public void TileWalls(HashSet<Vector2Int> positions, RuleTile ruleTile)
     {
-        //WallTilemap.ClearAllTiles();
-        
         foreach (var position in positions)
         {
             WallTilemap.SetTile(new Vector3Int(position.x, position.y), ruleTile);
@@ -67,7 +64,6 @@ public class DungeonTiler : MonoBehaviour
         }
     }
     
-    // todo maybe move this into the dungeon gen
     /* Generate a background based off bounds.*/
     public void GenerateBackground(IEnumerable<Vector2Int> dungeonFloor)
     {
@@ -83,7 +79,6 @@ public class DungeonTiler : MonoBehaviour
             for (int y = bottomBound.y; y < topBound.y; y++)
             {
                 backgroundPositions.Add(new Vector2Int(x, y));
-                //BackgroundTilemap.SetTile(new Vector3Int(x, y), DefaultBackgroundRuleTile);
             }
         }
         
