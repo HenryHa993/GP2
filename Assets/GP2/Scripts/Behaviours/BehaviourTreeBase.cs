@@ -7,10 +7,14 @@ using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 using WaitWhile = AlanZucconi.AI.BT.WaitWhile;
 
-public class AdventurerBT : MonoBehaviour
+public class BehaviourTreeBase : MonoBehaviour
 {
-    public DungeonGenerator DungeonGenerator;
-    
+    // todo: blackboard or here?
+    public int Damage;
+    public LayerMask AttackLayerMask;
+    public string EnemyTag;
+        
+    protected DungeonGenerator DungeonGenerator;
     protected IAstarAI Pathfinding;
     
     protected Node BT;
@@ -19,7 +23,7 @@ public class AdventurerBT : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //DungeonGenerator = GameObject.FindGameObjectWithTag() GetComponent<DungeonGenerator>();
+        DungeonGenerator = GameObject.FindGameObjectWithTag("DungeonGenerator").GetComponent<DungeonGenerator>();
         Pathfinding = GetComponent<IAstarAI>();
         BT = CreateBehaviourTree();
         BB = CreateBlackboard();
@@ -42,44 +46,76 @@ public class AdventurerBT : MonoBehaviour
     {
         return new Selector(
             new Filter(
-                () => IsEnemyInRange(3f), // Attack range
-                AttackEnemy()
-                ),
+                () => IsEnemyInRange(EnemyTag, 3f), // Attack range
+                new Sequence(
+                    /*new Action(() =>
+                    {
+                        MoveTo(transform.position);
+                    }),*/
+                    WaitForSeconds(1f),
+                    //AttackEnemy())
+                    AttackNearbyEnemies(EnemyTag, 3f)
+                )),
             new Filter(
-                () => IsEnemyInRange(10f), // Chasing range
-                ChaseEnemy()
+                () => IsEnemyInRange(EnemyTag, 10f), // Chasing range
+                ChaseNearestEnemy(EnemyTag)
                 ),
             Wander(5f, 5f)
             );
     }
-    
-    protected Node AttackEnemy()
-    {
-        return new Sequence();
-    }
-    
-    protected Node ChaseEnemy()
+
+    protected Node AttackNearbyEnemies(string enemyTag, float radius)
     {
         return new Action(() =>
         {
-            Vector3 position = FindClosestEnemy().transform.position;
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, radius, AttackLayerMask);
+            foreach (Collider2D collider in colliders)
+            {
+                GameObject enemy = collider.gameObject;
+                HealthSystem enemyHealthSystem = enemy.GetComponent<HealthSystem>();
+                if (enemyHealthSystem && !CompareTag(enemy.tag))
+                {
+                    enemyHealthSystem.ApplyDamage(Damage, (enemy.transform.position - transform.position).normalized);
+                }
+            }
+        });
+    }
+    
+    protected Node AttackNearestEnemy(string enemyTag)
+    {
+        return new Action(() =>
+        {
+            GameObject enemy = FindClosestEnemy(enemyTag);
+            HealthSystem enemyHealthSystem = enemy.GetComponent<HealthSystem>();
+            Vector2 direction = (enemy.transform.position - transform.position).normalized;
+            enemyHealthSystem.ApplyDamage(Damage, direction);
+        });
+    }
+    
+    protected Node ChaseNearestEnemy(string enemyTag)
+    {
+        return new Action(() =>
+        {
+            Vector3 position = FindClosestEnemy(enemyTag).transform.position;
+            Vector3 random = Random.insideUnitCircle * 2f;
+            position += random;
             MoveTo(position);
         });
     }
 
     /* Return the closest enemy, dependant on the tag of the game object.*/
-    protected GameObject FindClosestEnemy()
+    protected GameObject FindClosestEnemy(string enemyTag)
     {
-        return GameObject.FindGameObjectsWithTag("Adventurer")
+        return GameObject.FindGameObjectsWithTag(enemyTag)
             .OrderBy(adventurer => Vector3.SqrMagnitude(adventurer.transform.position - transform.position))
             .FirstOrDefault();
     }
 
     /* Determine if enemies are either in attack or chase range.
        This is used for filter conditions. */
-    protected bool IsEnemyInRange(float range)
+    protected bool IsEnemyInRange(string enemyTag, float range)
     {
-        return GameObject.FindGameObjectsWithTag("Adventurer")
+        return GameObject.FindGameObjectsWithTag(enemyTag)
             .Any(adventurer => Vector2.Distance(adventurer.transform.position, transform.position) <= range);
     }
 
@@ -95,7 +131,7 @@ public class AdventurerBT : MonoBehaviour
     {
         return new Task(() =>
         {
-            print("Waiting");
+            //print("Waiting");
             float waitTime = BB.Get<float>("CurrentWaitTime") - Time.deltaTime;
             BB.Set<float>("CurrentWaitTime", waitTime);
             if (waitTime < 0f)
@@ -110,7 +146,7 @@ public class AdventurerBT : MonoBehaviour
 
     protected void MoveTo(Vector3 position)
     {
-        print("Moving");
+        //print("Moving");
         Pathfinding.destination = position;
         Pathfinding.SearchPath();
         /*if (!Pathfinding.pathPending && (Pathfinding.reachedEndOfPath || !Pathfinding.hasPath))
