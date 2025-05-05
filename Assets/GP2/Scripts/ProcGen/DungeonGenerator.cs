@@ -65,6 +65,9 @@ public class DungeonGenerator : MonoBehaviour
         GenerateRoomsWithCorridors();
         
         StartCoroutine(GenerateGridGraph(DungeonTiler.WallTilemap.cellBounds));
+
+        Camera.main.transform.position = new Vector3(DungeonTiler.BackgroundTilemap.cellBounds.center.x,
+            DungeonTiler.BackgroundTilemap.cellBounds.center.y, -10);
     }
 
     public void GenerateRoomsOnly()

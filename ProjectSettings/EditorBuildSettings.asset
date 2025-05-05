@@ -8,7 +8,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/GP2/Scenes/GOAPDemoScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 1
+  - enabled: 0
     path: Assets/Libraries/CrashKonijn/GOAP/Demos/Complex/Scenes/ComplexDemoScene.unity
     guid: 3e9031a958dc3b64d88aae6286257ef5
+  - enabled: 1
+    path: Assets/GP2/Scenes/MainScene.unity
+    guid: 4f798026ac04cc94e8115bb4af62be36
   m_configObjects: {}

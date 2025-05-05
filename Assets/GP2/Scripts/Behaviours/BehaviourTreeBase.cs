@@ -47,6 +47,7 @@ public class BehaviourTreeBase : MonoBehaviour
         return Action.Nothing;
     }
 
+    /* An area attack which hits multiple enemies in a radius.*/
     protected Node AttackNearbyEnemies(string enemyTag, float radius)
     {
         return new Action(() =>
@@ -64,6 +65,7 @@ public class BehaviourTreeBase : MonoBehaviour
         });
     }
     
+    /* Singular attack on the nearest enemy.*/
     protected Node AttackNearestEnemy(string enemyTag)
     {
         return new Action(() =>
@@ -77,19 +79,41 @@ public class BehaviourTreeBase : MonoBehaviour
     
     protected Node ChaseNearestEnemy(string enemyTag)
     {
-        return new Action(() =>
+        return new Task(() =>
+        {
+            GameObject enemy = FindClosestEnemy(enemyTag);
+
+            if (enemy == null)
+            {
+                return Status.Failure;
+            }
+            
+            Vector3 position = enemy.transform.position;
+            Vector3 random = Random.insideUnitCircle * 2f;
+            position += random;
+            MoveTo(position);
+            return Status.Success;
+        });
+        /*return new Action(() =>
         {
             Vector3 position = FindClosestEnemy(enemyTag).transform.position;
             Vector3 random = Random.insideUnitCircle * 2f;
             position += random;
             MoveTo(position);
-        });
+        });*/
     }
 
     /* Return the closest enemy, dependant on the tag of the game object.*/
     protected GameObject FindClosestEnemy(string enemyTag)
     {
-        return GameObject.FindGameObjectsWithTag(enemyTag)
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag(enemyTag);
+        
+        if (enemies.Length == 0)
+        {
+            return null;
+        }
+        
+        return enemies
             .OrderBy(adventurer => Vector3.SqrMagnitude(adventurer.transform.position - transform.position))
             .FirstOrDefault();
     }
@@ -102,6 +126,8 @@ public class BehaviourTreeBase : MonoBehaviour
             .Any(adventurer => Vector2.Distance(adventurer.transform.position, transform.position) <= range);
     }
 
+    /* Wandering behaviour. Periodically move to a random location and wait
+       a random amount of time.*/
     protected Node Wander(float range, float minWait, float maxWait)
     {
         return new Sequence(
@@ -110,6 +136,7 @@ public class BehaviourTreeBase : MonoBehaviour
         );
     }
 
+    /* Task node which returns running until a timer is out.*/
     protected Node WaitForSeconds(float seconds)
     {
         return new Task(() =>
@@ -127,6 +154,7 @@ public class BehaviourTreeBase : MonoBehaviour
         });
     }
 
+    /* Move to destination given.*/
     protected void MoveTo(Vector3 position)
     {
         //print("Moving");
@@ -139,6 +167,7 @@ public class BehaviourTreeBase : MonoBehaviour
         }*/
     }
     
+    /* Get a random position based on range given.*/
     protected Vector3 GetRandomPosition(float range)  
     {  
         Vector3 random = Random.insideUnitCircle * range;  
