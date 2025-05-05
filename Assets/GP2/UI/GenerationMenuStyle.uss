@@ -1,0 +1,54 @@
+Slider Label {
+    color: rgb(255, 255, 255);
+    -unity-font-style: bold;
+    -unity-text-align: upper-center;
+    flex-wrap: nowrap;
+}
+
+.MenuTitle {
+    color: rgb(255, 255, 255);
+    -unity-font-style: bold;
+    -unity-text-align: upper-center;
+}
+
+.hidden {
+    display: none;
+}
+
+TextField Label {
+    -unity-font-style: bold;
+    color: rgb(255, 255, 255);
+    -unity-text-align: upper-center;
+}
+
+EnumField Label {
+    color: rgb(255, 255, 255);
+    -unity-text-align: upper-center;
+    -unity-font-style: bold;
+}
+
+Slider TextField {
+    min-width: 100px;
+    -unity-font-style: bold;
+    justify-content: flex-start;
+}
+
+.SliderInt {
+}
+
+SliderInt TextField {
+    color: rgb(0, 0, 0);
+    -unity-font-style: bold;
+}
+
+SliderInt Label {
+    color: rgb(255, 255, 255);
+    -unity-text-align: upper-center;
+    -unity-font-style: bold;
+}
+
+Toggle Label {
+    color: rgb(255, 255, 255);
+    -unity-font-style: bold;
+    -unity-text-align: upper-center;
+}

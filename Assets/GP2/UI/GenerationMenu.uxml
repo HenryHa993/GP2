@@ -1,0 +1,25 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/GP2/UI/GenerationMenuStyle.uss?fileID=7433441132597879392&amp;guid=5c4e59d769c792a4284e9e7ab2282754&amp;type=3#GenerationMenuStyle" />
+    <ui:VisualElement name="Root" style="justify-content: center; align-items: center; width: 100%; height: 100%; padding-top: 50px; padding-right: 50px; padding-bottom: 50px; padding-left: 50px;">
+        <ui:VisualElement name="Panel" style="background-color: rgba(0, 0, 0, 0.59); width: 100%; height: 100%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 20px; padding-right: 20px; padding-bottom: 20px; padding-left: 20px; flex-shrink: 1; flex-direction: row; justify-content: space-around; align-items: stretch;">
+            <ui:VisualElement style="flex-grow: 1; flex-shrink: 0;">
+                <ui:Label tabindex="-1" text="Unit Options" parse-escape-sequences="true" display-tooltip-when-elided="true" class="MenuTitle" />
+            </ui:VisualElement>
+            <ui:VisualElement style="flex-grow: 1; flex-shrink: 0;">
+                <ui:Label tabindex="-1" text="Dungeon Options" parse-escape-sequences="true" display-tooltip-when-elided="true" class="MenuTitle" />
+                <ui:ScrollView>
+                    <ui:Label tabindex="-1" text="Random Walk" parse-escape-sequences="true" display-tooltip-when-elided="true" class="MenuTitle" />
+                    <ui:SliderInt label="Iterations" high-value="100" show-input-field="true" page-size="0" low-value="1" inverted="false" focusable="false" name="RWIterations" style="-unity-font-style: bold; color: rgb(255, 255, 255); -unity-text-align: upper-center;" />
+                    <ui:SliderInt label="Steps Per Iteration" high-value="100" show-input-field="true" low-value="1" name="RWStepsSlider" />
+                    <ui:Slider label="Slider" high-value="1" show-input-field="true" name="RoomRatio" />
+                    <ui:Toggle label="Random Start" name="RWRandomStart" value="true" />
+                    <ui:Label tabindex="-1" text="Corridor Walk" parse-escape-sequences="true" display-tooltip-when-elided="true" class="MenuTitle" />
+                    <ui:SliderInt label="Iterations" high-value="100" name="CRIterations" low-value="1" show-input-field="true" />
+                    <ui:SliderInt label="Steps Per Iteration" high-value="100" name="CWSteps" show-input-field="true" />
+                    <ui:Toggle label="Dead Ends" value="true" name="CWDeadends" />
+                </ui:ScrollView>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:Label tabindex="-1" text="SPACE for Generation Options" parse-escape-sequences="true" display-tooltip-when-elided="true" class="MenuTitle" style="flex-grow: 1; position: absolute; bottom: 0;" />
+    </ui:VisualElement>
+</ui:UXML>
