@@ -12,10 +12,9 @@ public class DungeonCamera : MonoBehaviour
 
     private Camera MainCamera;
     
-    // Start is called before the first frame update
+    /* Scale camera settings to see the generated map.*/
     IEnumerator Start()
     {
-        yield return null;// WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
         
         MainCamera = GetComponent<Camera>();
@@ -27,7 +26,7 @@ public class DungeonCamera : MonoBehaviour
         
     }
 
-    // Update is called once per frame
+    /* Handles camera controls.*/
     void Update()
     {
         if (Input.GetKey(KeyCode.W))

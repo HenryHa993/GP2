@@ -29,6 +29,7 @@ public class GenerationMenu : MonoBehaviour
 
     private void Awake()
     {
+        // Get UI elements
         RootElement = GetComponent<UIDocument>().rootVisualElement;
         PanelElement = RootElement.Q<VisualElement>("Panel");
         
@@ -45,6 +46,7 @@ public class GenerationMenu : MonoBehaviour
         
         SetupMenu();
 
+        // Value changes automatically adjust the generator
         RWIterations.RegisterValueChangedCallback((evt) => generator.Iterations = evt.newValue);
         RWSteps.RegisterValueChangedCallback((evt) => generator.StepsPerIteration = evt.newValue);
         RWRoomRatio.RegisterValueChangedCallback((evt) => generator.RoomPercent = evt.newValue);
@@ -56,6 +58,7 @@ public class GenerationMenu : MonoBehaviour
         GenerateButton.clicked += Generate;
     }
 
+    /* Handle UI menu collapse on space input.*/
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
@@ -73,6 +76,7 @@ public class GenerationMenu : MonoBehaviour
         }
     }
 
+    /* Populate menu with default values.*/
     public void SetupMenu()
     {
         RWIterations.value = 20;

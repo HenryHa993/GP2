@@ -44,28 +44,16 @@ public class DungeonGenerator : MonoBehaviour
     {
         DungeonTiler = GetComponent<DungeonTiler>();
         DungeonRoomGenerator = GetComponent<DungeonRoomGenerator>();
-        
-        AstarData data = AstarPath.active.data;
-        PathfindingGraph = data.AddGraph(typeof(GridGraph)) as GridGraph;
+
+        SetUpGridGraph();
         
         Generate();
-    }
-
-    private void Update()
-    {
-        if (Input.GetKey(KeyCode.P))
-        {
-            OnGeneration.Invoke();
-            
-            DungeonTiler.FloorTilemap.ClearAllTiles();
-            DungeonTiler.WallTilemap.ClearAllTiles();
-            DungeonTiler.BackgroundTilemap.ClearAllTiles();
-        }
     }
 
     /* Determines generation type depending on settings. */
     public void Generate()
     {
+        // Allows monsters and adventurers to destroy themselves.
         OnGeneration.Invoke();
         
         DungeonTiler.FloorTilemap.ClearAllTiles();
@@ -107,6 +95,7 @@ public class DungeonGenerator : MonoBehaviour
         DungeonTiler.GenerateBackground(corridorPositions);
     }
     
+    /* Generate both rooms and corridors.*/
     public void GenerateRoomsWithCorridors()
     {
         HashSet<Vector2Int> roomPositions = new HashSet<Vector2Int>();
@@ -147,28 +136,15 @@ public class DungeonGenerator : MonoBehaviour
         DungeonTiler.GenerateBackground(floorPositions);
     }
 
-    public IEnumerator GenerateGridGraph(BoundsInt bounds)
+    /* Set up the grid graph's basic values.*/
+    public void SetUpGridGraph()
     {
-        /*// This holds all graph data
         AstarData data = AstarPath.active.data;
-
-        // This creates a Grid Graph
-        GridGraph gg = data.AddGraph(typeof(GridGraph)) as GridGraph;*/
+        PathfindingGraph = data.AddGraph(typeof(GridGraph)) as GridGraph;
         
         // Set grid
         PathfindingGraph.SetGridShape(InspectorGridMode.Grid);
         PathfindingGraph.is2D = true;
-
-        // Setup a grid graph with some values
-        int width = bounds.size.x * 2;
-        int depth = bounds.size.y * 2;
-        float nodeSize = 0.5f;
-
-        PathfindingGraph.center = bounds.center;
-        PathfindingGraph.center.z = 0;
-
-        // Updates internal size from the above values
-        PathfindingGraph.SetDimensions(width, depth, nodeSize);
         
         PathfindingGraph.collision.use2D = true;
         PathfindingGraph.collision.collisionCheck = true;
@@ -180,17 +156,32 @@ public class DungeonGenerator : MonoBehaviour
         PathfindingGraph.showMeshSurface = true;
 
         PathfindingGraph.collision.mask = LayerMask;
+    }
+
+    /* Adjust the graph and re-scan based on the bounds of the level.*/
+    public IEnumerator GenerateGridGraph(BoundsInt bounds)
+    {
+        // Setup a grid graph with some values
+        int width = bounds.size.x * 2;
+        int depth = bounds.size.y * 2;
+        float nodeSize = 0.5f;
+
+        PathfindingGraph.center = bounds.center;
+        PathfindingGraph.center.z = 0;
+
+        // Updates internal size from the above values
+        PathfindingGraph.SetDimensions(width, depth, nodeSize);
         
         AstarPath.active.Scan();
         
+        // Graph is re-scanned to account for map changes and prevent issues caused by race conditions.
+        
         yield return null;
         
-        // Scans all graphs
         AstarPath.active.Scan();
     }
 
     /* Generate and register room to RoomMap*/
-    // todo you need to generate wall positions
     public HashSet<Vector2Int> GenerateAndRegisterRooms(IEnumerable<Vector2Int> roomPositions)
     {
         HashSet<Vector2Int> allRoomPositions = new HashSet<Vector2Int>();

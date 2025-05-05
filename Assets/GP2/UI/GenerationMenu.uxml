@@ -1,6 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/GP2/UI/GenerationMenuStyle.uss?fileID=7433441132597879392&amp;guid=5c4e59d769c792a4284e9e7ab2282754&amp;type=3#GenerationMenuStyle" />
     <ui:VisualElement name="Root" style="justify-content: center; align-items: center; width: 100%; height: 100%; padding-top: 50px; padding-right: 50px; padding-bottom: 50px; padding-left: 50px;">
+        <ui:Label tabindex="-1" text="WASD for Camera Movement, QE for Camera Zoom" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Label" class="MenuTitle" style="flex-grow: 1; position: absolute; bottom: auto; top: 0;" />
         <ui:VisualElement name="Panel" style="background-color: rgba(0, 0, 0, 0.59); width: 100%; height: 100%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 20px; padding-right: 20px; padding-bottom: 20px; padding-left: 20px; flex-shrink: 1; flex-direction: row; justify-content: space-around; align-items: stretch;">
             <ui:VisualElement style="flex-grow: 1; flex-shrink: 0;">
                 <ui:Label tabindex="-1" text="Dungeon Options" parse-escape-sequences="true" display-tooltip-when-elided="true" class="MenuTitle" />

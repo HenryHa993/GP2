@@ -6,6 +6,7 @@ using Random = UnityEngine.Random;
 
 namespace GP2.ProcGen
 {
+    /* Class used for getting random walk directions during traversal*/
     public static class Direction2D
     {
         public static Vector2Int[] Directions =
