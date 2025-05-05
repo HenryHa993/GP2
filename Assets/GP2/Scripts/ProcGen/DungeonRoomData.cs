@@ -8,5 +8,7 @@ public class DungeonRoomData : ScriptableObject
     public RuleTile WallRuleTile;
     public RuleTile FloorRuleTile;
     public DungeonPrefabData[] Prefabs;
-    public GameObject[] Enemies;
+    public GameObject[] Units;
+    public float SpawnProbability;
+    public int MaxUnitsPerRoom;
 }

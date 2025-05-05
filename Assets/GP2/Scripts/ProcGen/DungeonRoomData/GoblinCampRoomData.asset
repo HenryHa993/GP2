@@ -15,3 +15,7 @@ MonoBehaviour:
   WallRuleTile: {fileID: 11400000, guid: 5b62d0a37334d1f46a77ac60682a7290, type: 2}
   FloorRuleTile: {fileID: 11400000, guid: aa3a7809ca307124f84c4b516976df1a, type: 2}
   Prefabs: []
+  Units:
+  - {fileID: 2928802331062983841, guid: eee6ec7032539074da194c57b674244a, type: 3}
+  SpawnProbability: 0
+  MaxUnitsPerRoom: 0
